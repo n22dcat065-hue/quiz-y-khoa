@@ -26,14 +26,10 @@ function showTopicSelection() {
     const topicList = document.getElementById('topic-list');
     topicList.innerHTML = '';
     
-    // Merge cả hai nguồn dữ liệu
-    const allTopics = {...questionsData, ...(typeof questionsDataExtra !== 'undefined' ? questionsDataExtra : {})};
-    
-    for (let topic in allTopics) {
+    for (let topic in questionsData) {
         const btn = document.createElement('button');
         btn.className = 'topic-btn';
-        const questionCount = allTopics[topic].length;
-        btn.textContent = `${topic} (${questionCount} câu)`;
+        btn.textContent = `${topic} (${questionsData[topic].length} câu)`;
         btn.onclick = () => startQuiz(topic);
         topicList.appendChild(btn);
     }
@@ -45,14 +41,20 @@ function showTopicSelection() {
 function startAllQuestions() {
     currentMode = 'all';
     currentTopic = 'Tất cả chủ đề';
+    currentQuestions = shuffleArray(getAllQuestions());
+    userAnswers = new Array(currentQuestions.length).fill(null);
+    currentQuestionIndex = 0;
+    quizStarted = true;
     
-    // Merge tất cả câu hỏi từ cả hai nguồn
-    let allQuestions = getAllQuestions();
-    if (typeof getAllQuestionsExtra !== 'undefined') {
-        allQuestions = allQuestions.concat(getAllQuestionsExtra());
-    }
-    
-    currentQuestions = shuffleArray(allQuestions);
+    showSection('quiz-section');
+    displayQuestion();
+}
+
+// Bắt đầu trắc nghiệm đầy đủ (tất cả 734 câu)
+function startFullQuiz() {
+    currentMode = 'full';
+    currentTopic = 'Trắc Nghiệm Đầy Đủ (734 câu)';
+    currentQuestions = getAllQuestions(); // Không shuffle để giữ thứ tự
     userAnswers = new Array(currentQuestions.length).fill(null);
     currentQuestionIndex = 0;
     quizStarted = true;
@@ -65,16 +67,7 @@ function startAllQuestions() {
 function startQuiz(topic) {
     currentMode = 'topic';
     currentTopic = topic;
-    
-    // Kiểm tra topic có trong questionsData hay questionsDataExtra
-    let topicQuestions = questionsData[topic] || (typeof questionsDataExtra !== 'undefined' ? questionsDataExtra[topic] : null);
-    
-    if (!topicQuestions) {
-        alert('Không tìm thấy chủ đề này!');
-        return;
-    }
-    
-    currentQuestions = shuffleArray([...topicQuestions]);
+    currentQuestions = shuffleArray([...questionsData[topic]]);
     userAnswers = new Array(currentQuestions.length).fill(null);
     currentQuestionIndex = 0;
     quizStarted = true;
