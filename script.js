@@ -26,10 +26,14 @@ function showTopicSelection() {
     const topicList = document.getElementById('topic-list');
     topicList.innerHTML = '';
     
-    for (let topic in questionsData) {
+    // Merge cả hai nguồn dữ liệu
+    const allTopics = {...questionsData, ...(typeof questionsDataExtra !== 'undefined' ? questionsDataExtra : {})};
+    
+    for (let topic in allTopics) {
         const btn = document.createElement('button');
         btn.className = 'topic-btn';
-        btn.textContent = `${topic} (${questionsData[topic].length} câu)`;
+        const questionCount = allTopics[topic].length;
+        btn.textContent = `${topic} (${questionCount} câu)`;
         btn.onclick = () => startQuiz(topic);
         topicList.appendChild(btn);
     }
@@ -41,7 +45,14 @@ function showTopicSelection() {
 function startAllQuestions() {
     currentMode = 'all';
     currentTopic = 'Tất cả chủ đề';
-    currentQuestions = shuffleArray(getAllQuestions());
+    
+    // Merge tất cả câu hỏi từ cả hai nguồn
+    let allQuestions = getAllQuestions();
+    if (typeof getAllQuestionsExtra !== 'undefined') {
+        allQuestions = allQuestions.concat(getAllQuestionsExtra());
+    }
+    
+    currentQuestions = shuffleArray(allQuestions);
     userAnswers = new Array(currentQuestions.length).fill(null);
     currentQuestionIndex = 0;
     quizStarted = true;
@@ -54,7 +65,16 @@ function startAllQuestions() {
 function startQuiz(topic) {
     currentMode = 'topic';
     currentTopic = topic;
-    currentQuestions = shuffleArray([...questionsData[topic]]);
+    
+    // Kiểm tra topic có trong questionsData hay questionsDataExtra
+    let topicQuestions = questionsData[topic] || (typeof questionsDataExtra !== 'undefined' ? questionsDataExtra[topic] : null);
+    
+    if (!topicQuestions) {
+        alert('Không tìm thấy chủ đề này!');
+        return;
+    }
+    
+    currentQuestions = shuffleArray([...topicQuestions]);
     userAnswers = new Array(currentQuestions.length).fill(null);
     currentQuestionIndex = 0;
     quizStarted = true;
