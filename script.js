@@ -54,7 +54,7 @@ function startAllQuestions() {
 function startFullQuiz() {
     currentMode = 'full';
     currentTopic = 'Trắc Nghiệm Đầy Đủ (734 câu)';
-    currentQuestions = getAllQuestions(); // Không shuffle để giữ thứ tự
+    currentQuestions = shuffleArray(getAllQuestions()); // Shuffle để random
     userAnswers = new Array(currentQuestions.length).fill(null);
     currentQuestionIndex = 0;
     quizStarted = true;
