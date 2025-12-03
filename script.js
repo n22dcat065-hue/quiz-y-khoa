@@ -263,6 +263,8 @@ function showResults(correctCount) {
 function restartQuiz() {
     if (currentMode === 'all') {
         startAllQuestions();
+    } else if (currentMode === 'full') {
+        startFullQuiz();
     } else {
         startQuiz(currentTopic);
     }
@@ -284,4 +286,22 @@ function backToModeSelection() {
     quizStarted = false;
     
     showSection('mode-selection');
+}
+
+// Utility Functions
+function getAllQuestions() {
+    let allQuestions = [];
+    for (let topic in questionsData) {
+        allQuestions = allQuestions.concat(questionsData[topic]);
+    }
+    return allQuestions;
+}
+
+function shuffleArray(array) {
+    const shuffled = [...array];
+    for (let i = shuffled.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+    }
+    return shuffled;
 }
