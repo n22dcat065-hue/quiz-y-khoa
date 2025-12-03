@@ -1,0 +1,40 @@
+# HƯỚNG DẪN DEPLOY LÊN GITHUB PAGES
+
+## Bước 1: Cài Git (nếu chưa có)
+- Tải tại: https://git-scm.com/download/win
+- Cài đặt với tùy chọn mặc định
+
+## Bước 2: Mở PowerShell tại folder D:\Quiz và chạy lần lượt:
+
+# Khởi tạo Git
+git init
+
+# Thêm tất cả files
+git add .
+
+# Commit
+git commit -m "Initial commit - Quiz Y Khoa"
+
+# Thêm remote (thay YOUR_USERNAME và YOUR_REPO bằng tên thật của bạn)
+git remote add origin https://github.com/YOUR_USERNAME/YOUR_REPO.git
+
+# Đổi branch sang main
+git branch -M main
+
+# Push lên GitHub
+git push -u origin main
+
+## Bước 3: Bật GitHub Pages
+1. Vào Settings của repository
+2. Chọn Pages (menu bên trái)
+3. Source: chọn "main" branch
+4. Click Save
+5. Đợi 1-2 phút
+
+## Link web của bạn sẽ là:
+https://YOUR_USERNAME.github.io/YOUR_REPO/
+
+VÍ DỤ:
+- Username: nguyenvana
+- Repo: quiz-y-khoa
+- Link: https://nguyenvana.github.io/quiz-y-khoa/
